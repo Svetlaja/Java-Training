@@ -1,2 +1,2 @@
 # Java-Training
-This project contains tasks's solutions from Epam Learning Automation Testing Java
+This project contains tasks' solutions from Epam Learning Automation Testing Java
