@@ -1,20 +1,22 @@
 package by.epam.learn.io;
 
 import java.io.File;
-
-import static java.util.Objects.requireNonNull;
+import java.io.IOException;
+import java.util.Objects;
 
 public class GetFolderFiles {
-    public static void RecursivePrint(File[] arr, int level) {
-        for (File f : arr) {// for-each loop for main directory files
-            for (int i = 0; i < level; i++)// tabs for internal levels
-                System.out.print("\t");
+    public static String GetFilesList(File[] list, int level) throws IOException {
+        StringBuilder output = new StringBuilder();
+        for (File f : list) {
+            for (int i = 0; i < level; i++)
+                output.append("\t");
             if (f.isFile())
-                System.out.println("-" + f.getName());
+                output.append("\b").append("|   *").append(f.toPath().getFileName()).append("\n");
             else if (f.isDirectory()) {
-                System.out.println("+[" + f.getName() + "]");
-                RecursivePrint(requireNonNull(f.listFiles()), level + 1);// recursion for sub-directories
+                output.append("|---").append(f.toPath().getFileName()).append("\n")
+                        .append(GetFilesList(Objects.requireNonNull(f.listFiles()), level + 1));
             }
         }
+        return output.toString();
     }
 }
