@@ -5,7 +5,7 @@ import java.util.concurrent.Semaphore;
 
 public class AirportManagement {
     static final int COUNT_GATES = 5;
-    static final int COUNT_AIRCRAFTS = 6;
+    static final int COUNT_AIRCRAFTS = 7;
 
     static final String FLIGHT_CELL = "| Flight ";
     static final String DESTINATION_CELL = "| Destination";
@@ -18,8 +18,13 @@ public class AirportManagement {
     // Control Gates flags
     static boolean[] gate = null;
 
-    public static void main(String[] args) throws InterruptedException {
+    ArrayList<AircraftThread> aircrafts;
+    public AirportManagement(ArrayList<AircraftThread> aircrafts) {
+        this.aircrafts = aircrafts;
+    }
 
+    public static void main(String[] args) throws InterruptedException {
+        
         // Creating terminals ArrayList
         ArrayList<Terminal> terminals = new ArrayList<>();
         terminals.add( new Terminal(1, "Short-haul"));
@@ -46,8 +51,6 @@ public class AirportManagement {
         aircrafts.add( new AircraftThread
                 ("VA 1111", "AUCKLAND AIRPORT", "Boeing 737-700", 200, 16800, listTerm));
 
-        new AircraftList(aircrafts);
-
 //        Setting number of Gates
         gate = new boolean[COUNT_GATES];
 //        Control Gates flags [true-FREE,false-OCCUPIED]
@@ -60,7 +63,7 @@ public class AirportManagement {
         System.out.printf("%-11s%-21s%-25s%-5s%-5s%n", FLIGHT_CELL, DESTINATION_CELL, STATUS_CELL, GATE_CELL, TERMINAL_CELL);
         System.out.printf("%-11s%-21s%-25s%-5s%-5s%n", "| NO     ", "|            ", "|                    |", "     |", "         |");
         System.out.println("|-----------------------------------------------------------------------|");
-        for (int i = 1; i <= COUNT_AIRCRAFTS; i++) {
+        for (int i = 0; i < COUNT_AIRCRAFTS; i++) {
             new Thread(aircrafts.get(i)).start();
         }
     }
