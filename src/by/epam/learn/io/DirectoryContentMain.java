@@ -11,6 +11,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class DirectoryContentMain {
     public static void main(String[] args) throws IOException {
+        
         StringBuilder infoOutput = new StringBuilder();
 
         String filePath = "./src/FolderInfo.txt";
@@ -18,8 +19,7 @@ public class DirectoryContentMain {
         String folderPath = "./src";
         String info = "The currect Folder's content is written down in the Tree structured File " +
                 "FolderInfo.txt and looks like below: " + "\n";
-        int averageNumberOfFilesInDirectInTreeFile =
-                countFilesInTreeFile(filePath) / (countDirectoriesInTreeFile(filePath) + 1);
+        int averageNumberOfFilesInDirectInTreeFile = countFilesInTreeFile(filePath) / (countDirectoriesInTreeFile(filePath) + 1);
 
         if (new File(folderPath).exists() && new File(folderPath).isDirectory()) {
             File[] list = new File(folderPath).listFiles();
