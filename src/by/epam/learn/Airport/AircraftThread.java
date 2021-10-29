@@ -13,6 +13,8 @@ public class AircraftThread implements Runnable {
     static final String FINAL_CALL_CELL = "| Final call         |";
     static final String GATE_CLOSED_CELL = "| Gate closed        |";
     static final String DEPARTED_CELL = "| Departed           |";
+    static final String WAITING_CELL = "| Waiting for        |";
+    static final String FOR_RELEASING_GATE_CELL = "| releasing a Gate   |";
     String flightNO;
     String destination;
     String model;
@@ -33,7 +35,7 @@ public class AircraftThread implements Runnable {
         return flightNO;
     }
 
-    public String getDestination() {
+    private String getDestination() {
         return destination;
     }
 
@@ -66,12 +68,13 @@ public class AircraftThread implements Runnable {
     @Override
     public void run() {
         System.out.printf("%n%-11s%-21s%-25s%-5s%-5s%n", "| " + getFlightNO(), "| " + getDestination(), ARRIVED_CELL, "     |", "         |");
-
         try {
             // requiring for the permit
             airport.acquire();
             System.out.printf("%n%-11s%-21s%-25s%-5s%-5d%-1s%n", "| " + getFlightNO(), "| " + getDestination(), FOLLOWING_TERMINAL_CELL, "     |    ", followTerminal(), "| ");
             System.out.printf("%n%-11s%-21s%-25s%-5s%-5d%-1s%n", "| " + getFlightNO(), "| " + getDestination(), CHECKING_GATE_CELL, "     |    ", followTerminal(), "| ");
+            System.out.printf("%n%-11s%-21s%-25s%-5s%-5s%n%-11s%-21s%-25s%-5s%-5s%n", "| " + getFlightNO(), "| " + getDestination(), WAITING_CELL, "     |", "         |",
+                    "|        ", "|            ", FOR_RELEASING_GATE_CELL, "     |", "         |");
             int controlNumber = -1;
             // looking for free Gate and driving up to it
             synchronized (gate) {
