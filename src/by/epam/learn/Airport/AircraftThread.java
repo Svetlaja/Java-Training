@@ -15,11 +15,13 @@ public class AircraftThread implements Runnable {
     static final String DEPARTED_CELL = "| Departed           |";
     static final String WAITING_CELL = "| Waiting for        |";
     static final String FOR_RELEASING_GATE_CELL = "| releasing a Gate   |";
+    
     String flightNO;
     String destination;
     String model;
     int capacity;
     int flightRange;
+    
     TerminalList terminals;
 
     public AircraftThread(String flightNO, String destination, String model, int capacity, int flightRange, TerminalList terminals) {
