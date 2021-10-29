@@ -7,7 +7,7 @@ public class TerminalList {
     static ArrayList<AircraftThread> aircrafts;
     ArrayList<Terminal> terminals;
 
-    public TerminalList(ArrayList<Terminal> terminals) {
+    TerminalList(ArrayList<Terminal> terminals) {
         this.terminals = terminals;
     }
 
