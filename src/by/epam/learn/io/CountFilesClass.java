@@ -1,47 +1,95 @@
 package by.epam.learn.io;
 
-import java.io.File;
-import java.util.Objects;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+// @param folderPath - the path of the directory to start in (/src/)
+// @param filePath - the path of the regular file to start (/folderInfo.txt)
 public class CountFilesClass {
-    /**
-     * method countFilesInDirectory()- Counts files in a directory
-     * method countTotalFilesInDirectory()- Counts total files in a directory
-     * method countSubdirectories()- Counts subdirectories in a directory
-     *
-     * @param directory the directory to start in
-     * @return the total number of files/subdirectories
-     */
-    public static int countTotalFilesInDirectory(File directory) {
-        int totalCount = 0;
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            if (file.isFile()) {
-                totalCount++;
+    
+    //  method counts average file name length in the current directory /src
+    public static int countAverageFileNameLength(String folderPath) throws IOException {
+        int sumLengthOfFileName = 0;
+        List<Path> list;
+        Path path = Paths.get(folderPath);
+        try (Stream<Path> walk = Files.walk(path)) {
+            list = walk.filter(Files::isRegularFile)
+                    .collect(Collectors.toList());
+            for (Path file : list) {
+                int filenameLength = file.getFileName().toString().length();
+                sumLengthOfFileName = sumLengthOfFileName + filenameLength;
             }
-            if (file.isDirectory()) {
-                totalCount += countTotalFilesInDirectory(file);
-            }
+            return sumLengthOfFileName / countTotalFilesInDirectory(folderPath);
         }
-        return totalCount;
     }
 
-    public static int countFilesInDirectory(File directory) {
-        int countFiles = 0;
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            if (file.isFile()) {
-                countFiles++;
-            }
+    //  method counts files in the current directory /src (depth 1)
+    public static int countFilesInDirectory(String folderPath) throws IOException {
+        int countFiles;
+        Path path = Paths.get(folderPath);
+        try (Stream<Path> walk = Files.walk(path, 1)) {
+            countFiles = (int) walk.filter(Files::isRegularFile)
+                    .count();
         }
         return countFiles;
     }
 
-    public static int countSubdirectories(File directory) {
-        int countSubdir = 0;
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
-            if (file.isDirectory()) {
-                countSubdir++;
-            }
+    //  method counts total number of files in the current directory /src, including SubDirectories
+    public static int countTotalFilesInDirectory(String folderPath) throws IOException {
+        int countTotalFilesInDirectory;
+        Path path = Paths.get(folderPath);
+        try (Stream<Path> walk = Files.walk(path)) {
+            countTotalFilesInDirectory = (int) walk.filter(Files::isRegularFile)
+                    .count();
         }
-        return countSubdir;
+        return countTotalFilesInDirectory;
+    }
+
+    //  method counts total number of subdirectories in the current directory /src
+    public static int countSubDirectories(String folderPath) throws IOException {
+        int countSubDirectory;
+        Path path = Paths.get(folderPath);
+        try (Stream<Path> walk = Files.walk(path)) {
+            countSubDirectory = (int) walk.filter(Files::isDirectory)
+                    .count() - 1;
+        }
+        return countSubDirectory;
+    }
+
+    //  method counts/reads from the Tree Structured FolderInfo.txt:
+    //  total number of subdirectories in the directory /src
+    public static int countDirectoriesInTreeFile(String filePath) throws IOException {
+        int foldersInReadFileCount = 0;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            String folderLine;
+            while ((folderLine = bufferedReader.readLine()) != null) {
+                if (folderLine.contains("|---")) {
+                    foldersInReadFileCount++;
+                }
+            }
+            return foldersInReadFileCount;
+        }
+    }
+
+    //  method counts/reads from the Tree structured file FolderInfo.txt:
+    //  total number of files in the directory /src
+    public static int countFilesInTreeFile(String filePath) throws IOException {
+        int filesInReadFileCount = 0;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            String fileLine;
+            while ((fileLine = bufferedReader.readLine()) != null) {
+                if (fileLine.contains("*")) {
+                    filesInReadFileCount++;
+                }
+            }
+            return filesInReadFileCount;
+        }
     }
 }
