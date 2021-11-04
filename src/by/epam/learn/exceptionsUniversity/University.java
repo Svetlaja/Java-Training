@@ -1,28 +1,34 @@
 package by.epam.learn.exceptionsUniversity;
 
-import by.epam.learn.UniversityExceptions.DisciplineOrFacultyAbsenceException;
 import by.epam.learn.UniversityExceptions.MarkValueException;
-import by.epam.learn.UniversityExceptions.StudentAbsenceException;
+import by.epam.learn.UniversityExceptions.StudentAbsentException;
 
 import java.util.ArrayList;
 
-public class University {
+public class UniversityManager {
     static final String DISCIPLINE_1 = "Architecture";
     static final String DISCIPLINE_2 = "Art";
     static final String DISCIPLINE_3 = "Chemistry";
     static final String DISCIPLINE_4 = "Biology";
     static final String DISCIPLINE_5 = "Mathematics";
+
     static final String FACULTY_1 = "Architecture and History of Art";
     static final String FACULTY_2 = "Biology";
     static final String FACULTY_3 = "Law";
     static final String FACULTY_4 = "Faculty of Music";
     static final String FACULTY_5 = "Physics & Chemistry";
+
     ArrayList<Student> students;
     ArrayList<Faculty> faculties;
+    ArrayList<Group> groups;
+    ArrayList<Discipline> disciplines;
 
-    public University(ArrayList<Student> students, ArrayList<Faculty> faculties) {
+    public UniversityManager(ArrayList<Student> students, ArrayList<Faculty> faculties,
+                             ArrayList<Group> groups, ArrayList<Discipline> disciplines) {
         this.students = students;
         this.faculties = faculties;
+        this.groups = groups;
+        this.disciplines = disciplines;
     }
 
     public static void main(String[] args) throws InterruptedException {
@@ -32,13 +38,11 @@ public class University {
         disciplines.add(2, new Discipline(DISCIPLINE_3));
         disciplines.add(3, new Discipline(DISCIPLINE_4));
         disciplines.add(4, new Discipline(DISCIPLINE_5));
-        DisciplineList disciplineList = new DisciplineList(disciplines);
 
         ArrayList<Group> groups = new ArrayList<>();
         groups.add(0, new Group(1));
         groups.add(1, new Group(2));
         groups.add(2, new Group(3));
-        GroupList groupList = new GroupList(groups);
 
         ArrayList<Faculty> faculties = new ArrayList<>();
         faculties.add(0, new Faculty(FACULTY_1, 1));
@@ -60,15 +64,14 @@ public class University {
         faculties.add(4, new Faculty(FACULTY_5, 1));
         faculties.add(4, new Faculty(FACULTY_5, 2));
         faculties.add(4, new Faculty(FACULTY_5, 3));
-        FacultyList facultyList = new FacultyList(faculties);
 
         ArrayList<Student> students = new ArrayList<>();
-        students.add(new Student(1, "Sidorov", faculties.get(0), groups.get(0), disciplines.get(0), 16));
-        students.add(new Student(1, "Sidorov", faculties.get(0), groups.get(0), disciplines.get(1), 6));
+        students.add(new Student(1, "Sidorov", null, groups.get(0), disciplines.get(0), 10));
+        students.add(new Student(0, "Sidorov", faculties.get(0), groups.get(0), disciplines.get(1), 6));
         students.add(new Student(1, "Sidorov", faculties.get(0), groups.get(0), disciplines.get(2), 8));
         students.add(new Student(1, "Sidorov", faculties.get(0), groups.get(0), disciplines.get(3), 10));
 
-        students.add(new Student(2, "Petrov", faculties.get(0), groups.get(2), disciplines.get(0), 8));
+        students.add(new Student(0, "Petrov", faculties.get(0), groups.get(2), disciplines.get(0), 8));
         students.add(new Student(2, "Petrov", faculties.get(0), groups.get(2), disciplines.get(1), 6));
         students.add(new Student(2, "Petrov", faculties.get(0), groups.get(2), disciplines.get(2), 10));
         students.add(new Student(2, "Petrov", faculties.get(0), groups.get(2), disciplines.get(3), 7));
@@ -158,23 +161,28 @@ public class University {
         students.add(new Student(19, "Melnov", faculties.get(4), groups.get(1), disciplines.get(2), 8));
         students.add(new Student(19, "Melnov", faculties.get(4), groups.get(1), disciplines.get(3), 10));
 
-        students.add(new Student(20, "Stravinskiy", faculties.get(0), groups.get(0), disciplines.get(3), 10));
-        students.add(new Student(20, "Stravinskiy", faculties.get(0), groups.get(0), disciplines.get(3), 10));
-        students.add(new Student(20, "Stravinskiy", faculties.get(0), groups.get(0), disciplines.get(3), 10));
+        students.add(new Student(20, "Stravinskiy", faculties.get(0), groups.get(0), disciplines.get(0), 10));
+        students.add(new Student(20, "Stravinskiy", faculties.get(0), groups.get(0), disciplines.get(1), 10));
+        students.add(new Student(20, "Stravinskiy", faculties.get(0), groups.get(0), disciplines.get(2), 10));
         students.add(new Student(20, "Stravinskiy", faculties.get(0), groups.get(0), disciplines.get(3), 10));
 
-        students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(3), 10));
-        students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(3), 9));
-        students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(3), 7));
+        students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(0), 10));
+        students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(1), 9));
+        students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(2), 7));
         students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(3), 10));
 
-        StudentList studList = new StudentList(students, facultyList, groupList, disciplineList);
+        UniversityInfoReceiver studList = new UniversityInfoReceiver(students, disciplines);
+
         try {
-            int mark =students.get(0).getMark();
-            studList.getAverageMarkByFacultyGroupOnDiscipline(mark);
-            studList.getStudentAverageMarkOnDisciplines();
-            studList.getAverageMarkByUniversityOnDiscipline();
-        } catch (NullPointerException|MarkValueException | DisciplineOrFacultyAbsenceException | StudentAbsenceException ex) {
+            NullPointerException er = null;
+            studList.getAverageMarkByFacultyGroupOnDiscipline
+                    (faculties.get(0).faculty, groups.get(0).numberGroup, disciplines.get(1).discipline);
+            studList.getStudentAverageMarkOnDisciplines(2, groups.get(0).numberGroup);
+            studList.getAverageMarkByUniversityOnDiscipline(groups.get(0).numberGroup, disciplines.get(1).discipline);
+            throw er;
+        } catch (NullPointerException er) {
+            System.out.println("Faculty, Group or Discipline is null");
+        } catch (StudentAbsentException | MarkValueException ex) {
             System.out.println(ex.getMessage());
         }
     }
