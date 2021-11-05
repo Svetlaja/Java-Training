@@ -1,9 +1,6 @@
 package by.epam.learn.exceptionsUniversity;
 
-import by.epam.learn.UniversityExceptions.FacultyAbsenceException;
-import by.epam.learn.UniversityExceptions.GroupAbsenceException;
-import by.epam.learn.UniversityExceptions.MarkValueException;
-import by.epam.learn.UniversityExceptions.StudentAbsentException;
+import by.epam.learn.UniversityExceptions.*;
 
 import java.util.ArrayList;
 
@@ -11,7 +8,6 @@ import static by.epam.learn.exceptionsUniversity.UniversityManager.DISCIPLINE_2;
 import static by.epam.learn.exceptionsUniversity.UniversityManager.FACULTY_1;
 
 public class UniversityInfoReceiver {
-    
     ArrayList<Student> students;
     ArrayList<Discipline> disciplines;
 
@@ -24,31 +20,31 @@ public class UniversityInfoReceiver {
         return students;
     }
 
-    public int getAverageMarkByFacultyGroupOnDiscipline(String facultyToMark, int numOfGroupToMark, String disciplineToMark) throws
-        FacultyAbsenceException, StudentAbsentException, MarkValueException, GroupAbsenceException {
-        
+    public int getAverageMarkByFacultyGroupOnDiscipline(String facultyToMark, int numOfGroupToMark, String disciplineToMark)
+            throws FacultyAbsenceException, StudentAbsentException, MarkValueException, GroupAbsenceException, DisciplineAbsenceException {
         int sumMark = 0;
         int numberOfMarks = 0;
         int averageMarkFaculty;
-        
-        for (Student stud : students)
-            if (!(students.isEmpty()) && (stud.getFaculties().getFacultyName() == null)) {
+        for (Student student : students)
+            if (!(students.isEmpty()) && (student.getFaculties().getFacultyName() == null)) {
                 throw new FacultyAbsenceException("\"Faculty is absent\": ");
-            } else if (!(students.isEmpty()) && stud.getGroup() == null) {
+            } else if (!(students.isEmpty()) && student.getGroup() == null) {
                 throw new GroupAbsenceException("\"Group is absent\": ");
-            } else if (stud.getId() == 0 && stud.getGroup().getGroupNumber() == numOfGroupToMark) {
+            } else if (!(students.isEmpty()) && student.getDiscipline().getDisciplineName() == null) {
+                throw new DisciplineAbsenceException("\"Discipline is absent\": ");
+            } else if (student.getId() == 0 && student.getGroup().getGroupNumber() == numOfGroupToMark) {
                 throw new StudentAbsentException("\n Warning! StudentAbsentException: absent students: " +
-                        " - " + stud.getName() + " in the group #"
-                        + stud.getGroup().getGroupNumber() + " on Faculty " + "\""
-                        + stud.getFaculties().getFacultyName() + "\"");
-            } else if (!(stud.getId() == 0) && stud.getMark() < 0 || stud.getMark() > 10) {
-                throw new MarkValueException("Mark value: " + stud.getMark() + " is out of borders \n"
+                        " - " + student.getName() + " in the group #"
+                        + student.getGroup().getGroupNumber() + " on Faculty " + "\""
+                        + student.getFaculties().getFacultyName() + "\"");
+            } else if (!(student.getId() == 0) && student.getMark() < 0 || student.getMark() > 10) {
+                throw new MarkValueException("Mark value: " + student.getMark() + " is out of borders \n"
                         + "Group #1: " + "\n" + "Faculty: " + FACULTY_1 + "\n"
                         + "Discipline: " + DISCIPLINE_2);
-            } else if (!(stud.getId() == 0) && stud.getFaculties().getFacultyName().equals(facultyToMark)
-                    && (stud.getDiscipline().getDisciplineName().equals(disciplineToMark))
-                    && (stud.getGroup().getGroupNumber() == numOfGroupToMark)) {
-                sumMark += stud.getMark();
+            } else if (!(student.getId() == 0) && student.getFaculties().getFacultyName().equals(facultyToMark)
+                    && (student.getDiscipline().getDisciplineName().equals(disciplineToMark))
+                    && (student.getGroup().getGroupNumber() == numOfGroupToMark)) {
+                sumMark += student.getMark();
                 numberOfMarks = numberOfMarks + 1;
             }
         averageMarkFaculty = sumMark / numberOfMarks;
@@ -58,17 +54,17 @@ public class UniversityInfoReceiver {
     }
 
     public int getStudentAverageMarkOnDisciplines(int idNum, int numOfGroupToMark) throws
-            FacultyAbsenceException, StudentAbsentException, MarkValueException, GroupAbsenceException {
-        
+            FacultyAbsenceException, StudentAbsentException, MarkValueException, GroupAbsenceException, DisciplineAbsenceException {
         int sumDisciplinesMark = 0;
         int totalDisciplineMarks = 0;
         int averageMarkByDiscipline;
-        
         for (Student student : students)
             if (!(students.isEmpty()) && (student.getFaculties().getFacultyName() == null)) {
                 throw new FacultyAbsenceException("\"Faculty is absent\": ");
             } else if (!(students.isEmpty()) && student.getGroup() == null) {
                 throw new GroupAbsenceException("\"Group is absent\": ");
+            } else if (!(students.isEmpty()) && student.getDiscipline().getDisciplineName() == null) {
+                throw new DisciplineAbsenceException("\"Discipline is absent\": ");
             } else if (student.getId() == 0 && student.getGroup().getGroupNumber() == numOfGroupToMark) {
                 throw new StudentAbsentException("\n Warning! StudentAbsentException: absent students: " +
                         " - " + student.getName() + " in the group #"
@@ -88,29 +84,29 @@ public class UniversityInfoReceiver {
         return averageMarkByDiscipline;
     }
 
-    public int getAverageMarkByUniversityOnDiscipline(int numOfGroupToMark, String disciplineToMark) throws
-        FacultyAbsenceException, StudentAbsentException, MarkValueException, GroupAbsenceException {    
-        
+    public int getAverageMarkByUniversityOnDiscipline(int numOfGroupToMark, String disciplineToMark)
+            throws FacultyAbsenceException, StudentAbsentException, MarkValueException, GroupAbsenceException, DisciplineAbsenceException {
         int sumDisciplineMarkByUni = 0;
         int totalDisciplineMarksByUni = 0;
         int averageMarkOnDisciplineByUni;
-        
-        for (Student stud : students)
-            if (!(students.isEmpty()) && (stud.getFaculties().getFacultyName() == null)) {
+        for (Student student : students)
+            if (!(students.isEmpty()) && (student.getFaculties().getFacultyName() == null)) {
                 throw new FacultyAbsenceException("\"Faculty is absent\": ");
-            } else if (!(students.isEmpty()) && stud.getGroup() == null) {
+            } else if (!(students.isEmpty()) && student.getGroup() == null) {
                 throw new GroupAbsenceException("\"Group is absent\": ");
-            } else if (stud.getId() == 0 && stud.getGroup().getGroupNumber() == numOfGroupToMark) {
+            } else if (!(students.isEmpty()) && student.getDiscipline().getDisciplineName() == null) {
+                throw new DisciplineAbsenceException("\"Discipline is absent\": ");
+            } else if (student.getId() == 0 && student.getGroup().getGroupNumber() == numOfGroupToMark) {
                 throw new StudentAbsentException("\n Warning! StudentAbsentException: absent students: " +
-                        " - " + stud.getName() + " in the group #"
-                        + stud.getGroup().getGroupNumber() + " on Faculty " + "\""
-                        + stud.getFaculties().getFacultyName() + "\"");
-            } else if (!(stud.getId() == 0) && stud.getMark() < 0 || stud.getMark() > 10) {
-                throw new MarkValueException("Mark value: " + stud.getMark() + " is out of borders \n"
+                        " - " + student.getName() + " in the group #"
+                        + student.getGroup().getGroupNumber() + " on Faculty " + "\""
+                        + student.getFaculties().getFacultyName() + "\"");
+            } else if (!(student.getId() == 0) && student.getMark() < 0 || student.getMark() > 10) {
+                throw new MarkValueException("Mark value: " + student.getMark() + " is out of borders \n"
                         + "Group #1: " + "\n" + "Faculty: " + FACULTY_1 + "\n"
                         + "Discipline: " + DISCIPLINE_2);
-            } else if (!(stud.getId() == 0) && stud.getDiscipline().getDisciplineName().equals(disciplineToMark)) {
-                sumDisciplineMarkByUni += stud.getMark();
+            } else if (!(student.getId() == 0) && student.getDiscipline().getDisciplineName().equals(disciplineToMark)) {
+                sumDisciplineMarkByUni += student.getMark();
                 totalDisciplineMarksByUni = totalDisciplineMarksByUni + 1;
             }
         averageMarkOnDisciplineByUni = sumDisciplineMarkByUni / totalDisciplineMarksByUni;
