@@ -1,14 +1,11 @@
 package by.epam.learn.exceptionsUniversity;
 
-import by.epam.learn.UniversityExceptions.FacultyAbsenceException;
-import by.epam.learn.UniversityExceptions.GroupAbsenceException;
-import by.epam.learn.UniversityExceptions.MarkValueException;
-import by.epam.learn.UniversityExceptions.StudentAbsentException;
+import by.epam.learn.UniversityExceptions.*;
 
 import java.util.ArrayList;
 
 public class UniversityManager {
-    
+
     static final String DISCIPLINE_1 = "Architecture";
     static final String DISCIPLINE_2 = "Art";
     static final String DISCIPLINE_3 = "Chemistry";
@@ -35,7 +32,7 @@ public class UniversityManager {
     }
 
     public static void main(String[] args) throws InterruptedException, StudentAbsentException,
-            MarkValueException, FacultyAbsenceException, GroupAbsenceException {
+            MarkValueException, FacultyAbsenceException, GroupAbsenceException, DisciplineAbsenceException {
         ArrayList<Discipline> disciplines = new ArrayList<>();
         disciplines.add(0, new Discipline(DISCIPLINE_1));
         disciplines.add(1, new Discipline(DISCIPLINE_2));
@@ -176,10 +173,9 @@ public class UniversityManager {
         students.add(new Student(21, "Rozhdestvenskiy", faculties.get(0), groups.get(2), disciplines.get(3), 10));
 
         UniversityInfoReceiver studList = new UniversityInfoReceiver(students, disciplines);
-
-            studList.getStudentAverageMarkOnDisciplines(2, groups.get(0).getGroupNumber());
-            studList.getAverageMarkByUniversityOnDiscipline(groups.get(0).getGroupNumber(), disciplines.get(1).getDisciplineName());
-            studList.getAverageMarkByFacultyGroupOnDiscipline
-                    (faculties.get(0).getFacultyName(), groups.get(0).getGroupNumber(), disciplines.get(1).getDisciplineName());
+        studList.getStudentAverageMarkOnDisciplines(2, groups.get(0).getGroupNumber());
+        studList.getAverageMarkByUniversityOnDiscipline(groups.get(0).getGroupNumber(), disciplines.get(1).getDisciplineName());
+        studList.getAverageMarkByFacultyGroupOnDiscipline
+                (faculties.get(0).getFacultyName(), groups.get(0).getGroupNumber(), disciplines.get(1).getDisciplineName());
     }
 }
