@@ -3,12 +3,12 @@ package by.epam.learn.exceptionsUniversity;
 import java.util.Objects;
 
 public class Student {
-    int id;
-    String name;
-    Faculty faculties;
-    Group group;
-    Discipline discipline;
-    int mark;
+    private int id;
+    private String name;
+    private Faculty faculties;
+    private Group group;
+    private Discipline discipline;
+    private int mark;
 
     public Student(int id, String name, Faculty faculties, Group group, Discipline discipline, int mark) {
         this.id = id;
