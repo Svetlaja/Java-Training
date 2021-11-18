@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// @param folderPath - the path of the directory to start in (/src/)
+// @param folderPath - the path of the directory to start in (/src)
 // @param filePath - the path of the regular file to start (/folderInfo.txt)
 public class CountFilesClass {
-    
+
     //  method counts average file name length in the current directory /src
     public static int countAverageFileNameLength(String folderPath) throws IOException {
         int sumLengthOfFileName = 0;
@@ -63,29 +63,17 @@ public class CountFilesClass {
         return countSubDirectory;
     }
 
-    //  method counts/reads from the Tree Structured FolderInfo.txt:
-    //  total number of subdirectories in the directory /src
-    public static int countDirectoriesInTreeFile(String filePath) throws IOException {
-        int foldersInReadFileCount = 0;
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
-            String folderLine;
-            while ((folderLine = bufferedReader.readLine()) != null) {
-                if (folderLine.contains("|---")) {
-                    foldersInReadFileCount++;
-                }
-            }
-            return foldersInReadFileCount;
-        }
-    }
-
-    //  method counts/reads from the Tree structured file FolderInfo.txt:
-    //  total number of files in the directory /src
-    public static int countFilesInTreeFile(String filePath) throws IOException {
+    /**
+     *  Method counts/reads from the Tree structured file FolderInfo.txt:
+     *          - total number of files in the directory /src - with the value of String fileSign = "*";
+     *          - total number of subdirectories in the directory /src  - with the value of String fileSign = "|---"
+     */
+    public static int countFilesInTreeFile(String filePath, String fileCounterSign) throws IOException {
         int filesInReadFileCount = 0;
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
             String fileLine;
             while ((fileLine = bufferedReader.readLine()) != null) {
-                if (fileLine.contains("*")) {
+                if (fileLine.contains(fileCounterSign)) {
                     filesInReadFileCount++;
                 }
             }
