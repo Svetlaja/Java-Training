@@ -9,9 +9,14 @@ import static by.epam.learn.io.CountFilesClass.*;
 import static by.epam.learn.io.TreeStructuredFileCreator.getTreeStructuredFileList;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+/**
+ * Method countFilesInTreeFile(filePath, fileSign) counts/reads from the Tree structured file FolderInfo.txt:
+ * - total number of files in the directory /src - with the value of fileCounter;
+ * - total number of subdirectories in the directory /src  - with the value of folderCounter
+ */
+
 public class DirectoryContentMain {
     public static void main(String[] args) throws IOException {
-        
         StringBuilder infoOutput = new StringBuilder();
 
         String filePath = "./src/FolderInfo.txt";
@@ -19,7 +24,10 @@ public class DirectoryContentMain {
         String folderPath = "./src";
         String info = "The currect Folder's content is written down in the Tree structured File " +
                 "FolderInfo.txt and looks like below: " + "\n";
-        int averageNumberOfFilesInDirectInTreeFile = countFilesInTreeFile(filePath) / (countDirectoriesInTreeFile(filePath) + 1);
+        String fileCounter = "*";
+        String folderCounter = "|---";
+        int averageNumberOfFilesInDirectInTreeFile =
+                countFilesInTreeFile(filePath, fileCounter) / (countFilesInTreeFile(filePath, folderCounter) + 1);
 
         if (new File(folderPath).exists() && new File(folderPath).isDirectory()) {
             File[] list = new File(folderPath).listFiles();
@@ -47,8 +55,8 @@ public class DirectoryContentMain {
             if (new File(filePath).exists() && new File(filePath).isFile()) {
                 System.out.println("\n /src Directory's Summarizing Info read in the current " +
                         "tree structured file FolderInfo.txt: \n\n" +
-                        countFilesInTreeFile(filePath) + " - Total number of files; " + "\n");
-                System.out.println(countDirectoriesInTreeFile(filePath) + " - Total number of SubDirectories;" + "\n");
+                        countFilesInTreeFile(filePath, fileCounter) + " - Total number of files; " + "\n");
+                System.out.println(countFilesInTreeFile(filePath, folderCounter) + " - Total number of SubDirectories;" + "\n");
                 System.out.println(averageNumberOfFilesInDirectInTreeFile + " - Average number of Files;" + "\n");
                 System.out.println(countAverageFileNameLength(folderPath) + " - Average filename's Length");
             }
